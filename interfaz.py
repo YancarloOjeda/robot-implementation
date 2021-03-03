@@ -3,7 +3,6 @@ from tkinter import Tk
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
-#import cv2
 import os
 import PIL.Image
 
@@ -52,7 +51,6 @@ def getValues():
     
     #root.destroy()
     os.system("python Over_Net_Artificial_Vision.py")
-    #os.system("python red_vision_artificial_2.py")
 
 def setValuesFree():
     entSigma.insert(0,0.1)
@@ -86,13 +84,13 @@ canFreeParameters = tk.Canvas(root, width=290, height=210)
 canFreeParameters.create_rectangle(1,1,290,210, width=1)
 canFreeParameters.place(x=5, y=258)
 
-canActivationRule = tk.Canvas(root, width=120, height=140)
-canActivationRule.create_rectangle(1,1,120,140)
+canActivationRule = tk.Canvas(root, width=195, height=150)
+canActivationRule.create_rectangle(1,1,195,150)
 canActivationRule.place(x=15, y=282)
 
-canLearningRule = tk.Canvas(root, width=140, height=140)
-canLearningRule.create_rectangle(1,1,140,140, width=1)
-canLearningRule.place(x=145, y=282)
+canLearningRule = tk.Canvas(root, width=70, height=150)
+canLearningRule.create_rectangle(1,1,70,150, width=1)
+canLearningRule.place(x=215, y=282)
 
 canSimulationParameters = tk.Canvas(root, width=170, height=210)
 canSimulationParameters.create_rectangle(1,1,170,210, width=1)
@@ -132,22 +130,22 @@ lblMean = tk.Label(root, text='\u03BC')
 lblMean.place(x=25, y=395)
 
 lblLearning=tk.Label(root, text='Learning')
-lblLearning.place(x=153, y=275)
+lblLearning.place(x=220, y=275)
 
 lblAlpha=tk.Label(root, text='\u03B1')
-lblAlpha.place(x=155, y=295)
+lblAlpha.place(x=222, y=295)
 
 lblBeta=tk.Label(root, text='\u03B2')
-lblBeta.place(x=155, y=320)
+lblBeta.place(x=222, y=320)
 
-lblGaussian=tk.Label(root, text='Gaussian threshold')
-lblGaussian.place(x=155, y=345)
+lblGaussian=tk.Label(root, text='Threshold')
+lblGaussian.place(x=140, y=345)
 
 lblDesvGaussian=tk.Label(root, text='\u03C3')
-lblDesvGaussian.place(x=155, y=370)
+lblDesvGaussian.place(x=140, y=370)
 
 lblMeanGaussian = tk.Label(root, text='\u03BC')
-lblMeanGaussian.place(x=155, y=395)
+lblMeanGaussian.place(x=140, y=395)
 
 lblSimulationParameters = tk.Label(root, text='Simulation parameters')
 lblSimulationParameters.place(x=320, y=250)
@@ -189,16 +187,16 @@ entMean = tk.Entry(root, bd=1, width=5)
 entMean.place(x=40, y=395)
 
 entAlpha = tk.Entry(root, bd = 1, width=5)
-entAlpha.place(x=185, y=295)
+entAlpha.place(x=235, y=295)
 
 entBeta = tk.Entry(root, bd = 1, width=5)
-entBeta.place(x=185, y=320)
+entBeta.place(x=235, y=320)
 
 entDesvGaussian = tk.Entry(root, bd = 1, width=5)
-entDesvGaussian.place(x=185, y=370)
+entDesvGaussian.place(x=155, y=370)
 
 entMeanGaussian = tk.Entry(root, bd = 1, width=5)
-entMeanGaussian.place(x=185, y=395)
+entMeanGaussian.place(x=155, y=395)
 
 entTs = tk.Entry(root, bd = 1, width=8)
 entTs.place(x=400, y=295)

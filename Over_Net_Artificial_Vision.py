@@ -40,14 +40,10 @@ from random import choice
 import math
 import matplotlib.pyplot as plt
 from matplotlib.ticker import NullFormatter
-#from sklearn.linear_model import LinearRegression
-#from scipy.stats import norm
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import time
 import cv2
-#from scipy import misc, ndimage
-#import scipy
 import serial.tools.list_ports
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
@@ -114,7 +110,6 @@ def Activacion(Lx, Lx_T1, umbral, unidad, Activacion_T1):
     elif unidad == '7' and activaciones_T[0] > 0:
         Activacion = activaciones_T[0]
     
-   
     #Conditional Activation    
     else:
         #Reactivation mode
@@ -229,9 +224,7 @@ for aux_Replicas in range(numero_replicas):
     xDt1 = suma_ponderada(activaciones_T1[8:10], pesos_T1[8:10])
     LxD_T1 = Logistica(xDt1)
     xMOt1 = suma_ponderada(activaciones_T1[8:10], pesos_T1[10:])
-    LxMO_T1 = Logistica(xMOt1)
-
-         
+    LxMO_T1 = Logistica(xMOt1)         
 #%%-------------ACTIVACIONES---------------------------------------------------
     for aux_Ts in range(total):
         _, frame = cap.read()  
@@ -485,7 +478,6 @@ for aux_Replicas in range(numero_replicas):
     
     cap.release()
     GPIO.cleanup()
-    #Dev_WebCam_Read_B.release()
     cv2.destroyAllWindows()
 #%%---------PLOT----------------------------------------------
 if plotActivation == 1:    
@@ -525,13 +517,40 @@ except:
     pass
 
 if save  == 1:
-    file = open(sessionName + '.cvs', 'w')
-    file.write('ts'+','+'A'+','+'CTX'+','+'x'+','+'US'+','+'Act R*'+','+'CR'+'\n')
+    file = open(sessionName + '_activations.csv', 'w')
+    file.write('ts'+','+'A'+','+'CTX'+','+'x'+','+'US'+','+'S"1'+','+'S"2'+','+'H1'+','+'H2'+','
+               +'M"1'+',''M"2'+','+'D'+','+'R*'+','+'CR'+'\n')
     for i in range(total):
         file.write(str(i)+','+str(round(activaciones_Todos[1][i],3))+
                    ','+str(round(activaciones_Todos[2][i],3))+
                    ','+str(round(activaciones_Todos[3][i],3))+
                    ','+str(round(activaciones_Todos[0][i],3))+
+                   ','+str(round(activaciones_Todos[4][i],3))+                   
+                   ','+str(round(activaciones_Todos[6][i],3))+
+                   ','+str(round(activaciones_Todos[5][i],3))+
+                   ','+str(round(activaciones_Todos[7][i],3))+
+                   ','+str(round(activaciones_Todos[8][i],3))+
+                   ','+str(round(activaciones_Todos[9][i],3))+
+                   ','+str(round(activaciones_Todos[10][i],3))+
                    ','+str(round(activaciones_Todos[11][i],3))+
                    ','+str(round(RC[i],3))+','+'\n')
+    file.close()
+    
+    file = open(sessionName + '_weights.csv', 'w')
+    file.write('ts'+','+'A-S"1'+','+'CTX-S"1'+','+'CTX-S"2'+','+'x-S"2'+','+'S"1-H1'+','+'S"2-H2'+','+
+               'S"1-M"1'+','+'S"2-M"2'+','+'M"1-D'+','+'M"2-D'+',''M"1-R*'+','+'M"2-R*'+'\n')
+    for i in range(total):
+        file.write(str(i)+
+                   ','+str(round(pesos_Todos[0][i],3))+
+                   ','+str(round(pesos_Todos[1][i],3))+
+                   ','+str(round(pesos_Todos[2][i],3))+
+                   ','+str(round(pesos_Todos[3][i],3))+
+                   ','+str(round(pesos_Todos[4][i],3))+
+                   ','+str(round(pesos_Todos[5][i],3))+
+                   ','+str(round(pesos_Todos[6][i],3))+
+                   ','+str(round(pesos_Todos[7][i],3))+
+                   ','+str(round(pesos_Todos[8][i],3))+
+                   ','+str(round(pesos_Todos[9][i],3))+
+                   ','+str(round(pesos_Todos[10][i],3))+
+                   ','+str(round(pesos_Todos[11][i],3))+','+'\n')
     file.close()
