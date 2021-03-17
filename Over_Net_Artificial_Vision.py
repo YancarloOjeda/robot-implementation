@@ -49,7 +49,12 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(21, GPIO.IN)
 GPIO.setup(20, GPIO.IN)
+GPIO.setup(17, GPIO.OUT)
 
+response = GPIO.PWM(17, 50)
+response.start(2.5)
+aux_response = 0
+aux_angle = 5
 #%%-------------READ PARAMETERS------#################
 file = open('parameters.txt','r')
 arrParameters = file.read().split('\n')
@@ -227,22 +232,26 @@ for aux_Replicas in range(numero_replicas):
     LxMO_T1 = Logistica(xMOt1)         
 #%%-------------ACTIVACIONES---------------------------------------------------
     for aux_Ts in range(total):
-        _, frame = cap.read()  
-        #BLUE = A
+        _, frame = cap.read()
+        if aux_response == 1 and aux_angle == 15:
+            response.ChangeDutyCycle(5)
+            aux_angle = 5
+            aux_response = 0
+        #BLUE = x
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) 
         lower_blue = np.array([110,50,50]) 
         upper_blue = np.array([130,255,255])  
         mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
         blue = cv2.bitwise_and(frame,frame, mask= mask_blue)
         
-        #GREEN = x
+        #GREEN = A
         lower_green = np.array([25, 52, 72]) 
         upper_green = np.array([102,255,255])  
         mask_green = cv2.inRange(hsv, lower_green, upper_green) 
         green = cv2.bitwise_and(frame,frame, mask= mask_green) 
         
         #EI
-        if GPIO.input(21):
+        if GPIO.input(20):
             activaciones_T[0] = 0
         else:
             activaciones_T[0] = EI
@@ -252,10 +261,12 @@ for aux_Replicas in range(numero_replicas):
         suma_area_blue = ((np.sum(area_blue)/1000)*.1) 
         if suma_area_blue > 1:
             suma_area_blue = 1
+        #if suma_area_blue < 0.2:
+         #   suma_area_blue = 0
         activaciones_T[3] = suma_area_blue
         
         #CTX
-        if GPIO.input(20):
+        if GPIO.input(21):
             activaciones_T[2] = CTX
         else:
             activaciones_T[2] = 0
@@ -265,6 +276,8 @@ for aux_Replicas in range(numero_replicas):
         suma_area_green = ((np.sum(area_green)/1000)*.1)
         if suma_area_green > 1:
             suma_area_green = 1
+        if suma_area_green < 0.7:
+            suma_area_green = 0    
         activaciones_T[1] = suma_area_green
         
         total_frame = green + blue + frame#yellow + red + green + blue
@@ -292,8 +305,7 @@ for aux_Replicas in range(numero_replicas):
         
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-                    
-        
+           
         Lista_unidad = random.sample('12345678', 8)   
      
         for i in range(totalUnidades):
@@ -356,10 +368,7 @@ for aux_Replicas in range(numero_replicas):
                 activaciones_T[11] = Activacion(LxMO, LxMO_T1, umbral, unidad, activaciones_T1[11])
                 LxMO_T1 = LxMO
                 activaciones_T1[11] = activaciones_T[11] 
-                
-                
-                
-                 
+                           
 #%%-------------PESOS----------------------------------------------------------
         Lista_unidad_pesos = random.sample('123456789abc', 12) 
         dDt = discrepancia_D(activaciones_T[10], activaciones_T1[10])
@@ -467,8 +476,15 @@ for aux_Replicas in range(numero_replicas):
         if activaciones_T[11] > CRCriteria and activaciones_T[11] != activaciones_T[0]:
             aux_RC += 1
             RC[aux_Ts] = activaciones_T[11]
-            
-            
+            response.ChangeDutyCycle(aux_angle)
+            aux_response = 1
+            aux_angle += 1
+        #if activaciones_T[11] > 0.25:
+         #   response.ChangeDutyCycle(7.5)
+        #if activaciones_T[11] > 0.5:
+         #   response.ChangeDutyCycle(12.5)
+        #if activaciones_T[11] > 0.75:
+         #   response.ChangeDutyCycle(15)
         
         activaciones_T1[5] = activaciones_T[5]
         activaciones_T1[7] = activaciones_T[7] 
@@ -478,6 +494,7 @@ for aux_Replicas in range(numero_replicas):
     
     cap.release()
     GPIO.cleanup()
+    response.stop()
     cv2.destroyAllWindows()
 #%%---------PLOT----------------------------------------------
 if plotActivation == 1:    

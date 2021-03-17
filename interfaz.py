@@ -51,6 +51,7 @@ def getValues():
     
     #root.destroy()
     os.system("python Over_Net_Artificial_Vision.py")
+    #os.system("python /home/pi/Robot/move_output.py")
 
 def setValuesFree():
     entSigma.insert(0,0.1)
