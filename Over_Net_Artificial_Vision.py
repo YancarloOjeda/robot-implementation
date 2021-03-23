@@ -500,8 +500,8 @@ for aux_Replicas in range(numero_replicas):
 if plotActivation == 1:    
     #activaciones_Todos = np.delete(activaciones_Todos, np.where(activaciones_Todos[:][:] == 0), axis = 0)
     plt.subplot(1, 3, 1)
-    plt.plot(activaciones_Todos[11][:], ms=7, lw=2, alpha=0.8, label = 'Activation R*')
-    plt.plot(RC[:], ms=7, lw=2, alpha=0.8, label = 'RC')
+    #plt.plot(activaciones_Todos[11][:], ms=7, lw=2, alpha=0.8, label = 'Activation R*')
+    plt.plot(RC[:], ms=7, lw=2, alpha=0.8, label = 'RC', color='k')
     plt.legend(fontsize = 10)
     plt.ylim(-.005,1.0)
     plt.xlabel('Time steps', fontsize = 15)
